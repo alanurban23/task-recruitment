@@ -1,3 +1,5 @@
+import React from "react";
+
 const Footer = () => {
   return (
     <footer className="bg-primary text-center lg:text-left mt-8">
@@ -32,7 +34,7 @@ const Footer = () => {
         style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
       >
         © 2023 Copyright:
-        <p className="text-white">Klaudiusz Biegacz</p>
+        <p className="text-white">Alan Urban</p>
       </div>
     </footer>
   );

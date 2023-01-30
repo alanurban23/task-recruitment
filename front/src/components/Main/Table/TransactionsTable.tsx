@@ -1,11 +1,12 @@
 import React from "react";
 import { useMemo } from "react";
-import { useTable } from "react-table";
+import { Column, useTable } from "react-table";
 import { COLUMNS } from "./TableColumns";
 import { FiDelete } from "react-icons/fi";
 import moment from "moment";
 import axios from "axios";
 import { TTransaction } from "../../../types";
+import { API } from "../../../globals";
 
 type TTableProps = {
   data: TTransaction[];
@@ -13,14 +14,22 @@ type TTableProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   pages: number[];
 };
+
 function TransactionsTable(props: TTableProps) {
   const data = props.data || [];
-  const handleDelete = async (e) => {
-    const index = e.target.closest("tr").dataset.index;
-    axios.delete(`http://localhost:3000/transactions/${index}`);
+
+  const handleDelete = (e: any) => {
+    const row = e.target.closest("tr");
+    row.classList.add('deleted');
+    axios.delete(`${API}${row.dataset.index}`);
+    setTimeout(() => {
+      row.remove();
+    }, 1000);
   };
+
   const tableData = useMemo(() => data, [data]);
-  const tableColumns = useMemo(() => COLUMNS, [COLUMNS]);
+  const tableColumns = useMemo(() => COLUMNS, [COLUMNS]) as readonly Column<TTransaction>[];
+  
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns: tableColumns,
@@ -57,9 +66,7 @@ function TransactionsTable(props: TTableProps) {
                   return (
                     <tr
                       {...row.getRowProps()}
-                      data-index={
-                        props.page > 1 ? index + props.page * 10 : index
-                      }
+                      data-index={row.original.id}
                       className="mb-2 border-b border-gray-200 "
                       key={row.id}
                     >
@@ -79,7 +86,7 @@ function TransactionsTable(props: TTableProps) {
                       })}
                       <td
                         className="hover:cursor-pointer p-2 text-lg"
-                        onClick={handleDelete}
+                        onClick={(event) => handleDelete(event)}
                       >
                         <FiDelete />
                       </td>

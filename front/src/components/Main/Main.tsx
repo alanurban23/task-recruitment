@@ -2,6 +2,7 @@ import TransactionsTable from "./Table/TransactionsTable";
 import Form from "../Main/Form/Form";
 import { useTransactionsData } from "../../hooks/useTransactionsData";
 import Loader from "./Loader";
+import React from "react";
 
 const Main = () => {
   const {
@@ -14,6 +15,7 @@ const Main = () => {
     isLoading,
     newId,
   } = useTransactionsData();
+
   return (
     <main>
       <div className="flex p-6 w-3/4 mx-auto">
